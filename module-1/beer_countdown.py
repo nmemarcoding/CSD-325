@@ -37,3 +37,19 @@ def countdown_bottles(number):
             print("Take one down and pass it around, no more bottles of beer on the wall.\n")
     print("No more bottles of beer on the wall, no more bottles of beer.")
     print("Go to the store and buy some more beer!\n")
+
+
+def main():
+    """
+    The main function that runs the beer bottle countdown application.
+    """
+    print("Welcome to the 'Bottles of Beer on the Wall' Countdown!")
+    print()
+    number_of_bottles = get_positive_integer("How many bottles of beer are on the wall? ")
+    print("\nStarting the countdown...\n")
+    countdown_bottles(number_of_bottles)
+    print("Don't forget to buy more beer!\n")
+    print("Thank you for using the Beer Bottle Countdown App. Cheers!")
+
+if __name__ == "__main__":
+    main()
