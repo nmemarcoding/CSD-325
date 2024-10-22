@@ -1,3 +1,11 @@
+# Name: Nima Memarzadeh
+# Date: 10/22/2024
+# Assignment: Module 1.3
+
+"""
+    This program is a simple beer bottle countdown application.
+"""
+
 def get_positive_integer(prompt):
     """
     Prompts the user to enter a positive integer.
