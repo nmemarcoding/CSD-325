@@ -1,8 +1,5 @@
 """Forest Fire Sim, modified by Sue Sampson, based on a program by Al Sweigart
-A simulation of wildfires spreading in a forest. Press Ctrl-C to stop.
-Inspired by Nicky Case's Emoji Sim http://ncase.me/simulating/model/
-** use spaces, not indentation to modify **
-Tags: short, bext, simulation"""
+A simulation of wildfires spreading in a forest with a water firebreak. Press Ctrl-C to stop."""
 
 import random, sys, time
 
@@ -21,13 +18,12 @@ HEIGHT = 22
 TREE = 'A'
 FIRE = '@'
 EMPTY = ' '
+WATER = 'W'  # New water constant
 
-# (!) Try changing these settings to anything between 0.0 and 1.0:
-INITIAL_TREE_DENSITY = 0.20  # Amount of forest that starts with trees.
-GROW_CHANCE = 0.01  # Chance a blank space turns into a tree.
-FIRE_CHANCE = 0.01  # Chance a tree is hit by lightning & burns.
-
-# (!) Try setting the pause length to 1.0 or 0.0:
+# Simulation parameters:
+INITIAL_TREE_DENSITY = 0.20
+GROW_CHANCE = 0.01
+FIRE_CHANCE = 0.01
 PAUSE_LENGTH = 0.5
 
 
@@ -39,14 +35,11 @@ def main():
         displayForest(forest)
 
         # Run a single simulation step:
-        nextForest = {'width': forest['width'],
-                      'height': forest['height']}
+        nextForest = {'width': forest['width'], 'height': forest['height']}
 
         for x in range(forest['width']):
             for y in range(forest['height']):
                 if (x, y) in nextForest:
-                    # If we've already set nextForest[(x, y)] on a
-                    # previous iteration, just do nothing here:
                     continue
 
                 if ((forest[(x, y)] == EMPTY)
@@ -59,12 +52,16 @@ def main():
                     nextForest[(x, y)] = FIRE
                 elif forest[(x, y)] == FIRE:
                     # This tree is currently burning.
+                    spread_fire = False
                     # Loop through all the neighboring spaces:
                     for ix in range(-1, 2):
                         for iy in range(-1, 2):
-                            # Fire spreads to neighboring trees:
-                            if forest.get((x + ix, y + iy)) == TREE:
+                            # Fire spreads to neighboring trees, but not water:
+                            neighbor = forest.get((x + ix, y + iy))
+                            if neighbor == TREE:
                                 nextForest[(x + ix, y + iy)] = FIRE
+                                spread_fire = True
+                    
                     # The tree has burned down now, so erase it:
                     nextForest[(x, y)] = EMPTY
                 else:
@@ -80,7 +77,11 @@ def createNewForest():
     forest = {'width': WIDTH, 'height': HEIGHT}
     for x in range(WIDTH):
         for y in range(HEIGHT):
-            if (random.random() * 100) <= INITIAL_TREE_DENSITY:
+            # Create a lake in the center of the display
+            if (x in range(WIDTH//2-5, WIDTH//2+5) and 
+                y in range(HEIGHT//2-3, HEIGHT//2+3)):
+                forest[(x, y)] = WATER
+            elif (random.random() * 100) <= INITIAL_TREE_DENSITY:
                 forest[(x, y)] = TREE  # Start as a tree.
             else:
                 forest[(x, y)] = EMPTY  # Start as an empty space.
@@ -98,7 +99,9 @@ def displayForest(forest):
             elif forest[(x, y)] == FIRE:
                 bext.fg('red')
                 print(FIRE, end='')
-          	
+            elif forest[(x, y)] == WATER:
+                bext.fg('blue')
+                print(WATER, end='')
             elif forest[(x, y)] == EMPTY:
                 print(EMPTY, end='')
         print()
