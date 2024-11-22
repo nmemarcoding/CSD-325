@@ -1,3 +1,8 @@
+# Name: Nima Memarzadeh, Arely Gil, Scott Hackett, Brian Preston
+# Date: 22/11/2024
+# Assignment: Module 6.2
+
+
 """Forest Fire Sim, modified by Sue Sampson, based on a program by Al Sweigart
 A simulation of wildfires spreading in a forest with a water firebreak. Press Ctrl-C to stop."""
 
